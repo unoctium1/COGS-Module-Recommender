@@ -85,3 +85,108 @@
 % STAT 306	SCIENCE		ONE OF: MATH 152, 221, 223, and ONE OF: MATH 302, STAT 302 and ONE OF: STAT 200, 241, 251, 300, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PYSC 218, 278, 366
 % STAT 344	SCIENCE		ONE OF: STAT 200, 241, 251, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PSYC 218, 278, 366 COREQS: MATH 302, or STAT 302
 % STAT 406	SCIENCE		STAT 306 or CPSC 340
+
+:- dynamic hasTaken/0.
+
+% faculty(course(A,B),C) is true if course(A,B) is in faculty C
+faculty(course(anth, _),arts).
+faculty(course(asia, _),arts).
+faculty(course(ling, _),arts).
+faculty(course(phil, _),arts).
+faculty(course(psyc, _),arts).
+faculty(course(biol, _),science).
+faculty(course(cpsc, _),science).
+faculty(course(math, _),science).
+faculty(course(stat, _),science).
+faculty(course(mech, _),appliedscience).
+faculty(course(musc,_),music).
+faculty(course(audi,_),audiology).
+
+% isModule(course(A,B)) is true if course(A,B) is a module
+isModule(course(anth,417)).
+isModule(course(asia,371)).
+isModule(course(asia,378)).
+isModule(course(asia,470)).
+isModule(course(audi,402)).
+isModule(course(audi,403)).
+isModule(course(biol,361)).
+isModule(course(biol,455)).
+isModule(course(biol,458)).
+isModule(course(biol,459)).
+isModule(course(cpsc,304)).
+isModule(course(cpsc,310)).
+isModule(course(cpsc,311)).
+isModule(course(cpsc,312)).
+isModule(course(cpsc,313)).
+isModule(course(cpsc,314)).
+isModule(course(cpsc,317)).
+isModule(course(cpsc,319)).
+isModule(course(cpsc,320)).
+isModule(course(cpsc,322)).
+isModule(course(cpsc,340)).
+isModule(course(cpsc,344)).
+isModule(course(cpsc,404)).
+isModule(course(cpsc,416)).
+isModule(course(cpsc,420)).
+isModule(course(cpsc,421)).
+isModule(course(cpsc,422)).
+isModule(course(cpsc,425)).
+isModule(course(cpsc,430)).
+isModule(course(cpsc,444)).
+isModule(course(cpsc,445)).
+isModule(course(ling,300)).
+isModule(course(ling,311)).
+isModule(course(ling,313)).
+isModule(course(ling,314)).
+isModule(course(ling,319)).
+isModule(course(ling,327)).
+isModule(course(ling,345)).
+isModule(course(ling,405)).
+isModule(course(ling,410)).
+isModule(course(ling,421)).
+isModule(course(ling,425)).
+isModule(course(ling,431)).
+isModule(course(ling,432)).
+isModule(course(ling,447)).
+isModule(course(ling,451)).
+isModule(course(ling,452)).
+isModule(course(math,302)).
+isModule(course(math,303)).
+isModule(course(math,344)).
+isModule(course(math,443)).
+isModule(course(mech,421)).
+isModule(course(musc,320)).
+isModule(course(musc,415)).
+isModule(course(phil,320)).
+isModule(course(phil,321)).
+isModule(course(phil,322)).
+isModule(course(phil,323)).
+isModule(course(phil,326)).
+isModule(course(phil,333)).
+isModule(course(phil,340)).
+isModule(course(phil,369)).
+isModule(course(phil,441)).
+isModule(course(phil,450)).
+isModule(course(phil,451)).
+isModule(course(phil,455)).
+isModule(course(phil,470)).
+isModule(course(psyc,304)).
+isModule(course(psyc,309)).
+isModule(course(psyc,321)).
+isModule(course(psyc,333)).
+isModule(course(psyc,336)).
+isModule(course(psyc,359)).
+isModule(course(psyc,366)).
+isModule(course(psyc,367)).
+isModule(course(psyc,368)).
+isModule(course(psyc,370)).
+isModule(course(psyc,371)).
+isModule(course(psyc,460)).
+isModule(course(psyc,461)).
+isModule(course(psyc,462)).
+isModule(course(stat,302)).
+isModule(course(stat,306)).
+isModule(course(stat,344)).
+isModule(course(stat,406)).
+
+=(course(phil,371),course(asia,371)).
