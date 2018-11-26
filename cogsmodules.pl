@@ -93,16 +93,21 @@
 % faculty(course(A,B),C) is true if course(A,B) is in faculty C
 faculty(course(anth, _),arts).
 faculty(course(asia, _),arts).
+faculty(course(econ, _),arts).
 faculty(course(ling, _),arts).
 faculty(course(phil, _),arts).
 faculty(course(psyc, _),arts).
 faculty(course(biol, _),science).
+faculty(course(caps, _),science).
 faculty(course(cpsc, _),science).
 faculty(course(math, _),science).
 faculty(course(stat, _),science).
 faculty(course(mech, _),appliedscience).
-faculty(course(musc,_),music).
-faculty(course(audi,_),audiology).
+faculty(course(eece, _),appliedscience).
+faculty(course(elec, _),appliedscience).
+faculty(course(X,_),X) :- 
+	dif(X,Y),
+	\+ faculty(course(X,_),Y).
 
 % isModule(course(A,B)) is true if course(A,B) is a module
 isModule(course(anth,417)).
@@ -261,23 +266,23 @@ requires(course(cpsc,444),[course(cpsc,310),course(cpsc,344),course(stat,200)]).
 requires(course(cpsc,444),[course(cpsc,310),course(cpsc,344),course(stat,241)]).
 requires(course(cpsc,445),[course(cpsc,320),course(biol,X),course(biol,Y)]) :-
 	dif(X,Y).
+requires(course(ling,300),[course(ling,201)]).
+requires(course(ling,311),[course(ling,200)]).
+requires(course(ling,313),[course(ling,200)]).
+requires(course(ling,314),[course(ling,313)]).
+requires(course(ling,319),[course(ling,200),course(ling,201)]).
+requires(course(ling,327),[course(ling,201)]).
+requires(course(ling,345),[Y]) :- member(Y,[course(ling,201),course(engl,331),course(phil,220)]).
+requires(course(ling,405),[course(ling,300),course(ling,311)]).
+requires(course(ling,410),[course(ling,311)]).
+requires(course(ling,421),[course(ling,300)]).
+requires(course(ling,425),[course(ling,327)]).
+requires(course(ling,425),[course(phil,220)]).
+requires(course(ling,431),[course(ling,300),course(ling,311)]).
+requires(course(ling,432),[course(ling,431)]).
+requires(course(ling,451),[course(ling,222),course(ling,311)]).
+requires(course(ling,452),[course(ling,222),course(ling,300)]).
 
-% LING 300	ARTS		LING 201
-% LING 311	ARTS		LING 200
-% LING 313	ARTS		LING 200
-% LING 314	ARTS		LING 313
-% LING 319	ARTS		LING 200, LING 201
-% LING 327	ARTS		LING 201
-% LING 345	ARTS		ONE OF: LING 201, ENGL 331, PHIL 220
-% LING 405	ARTS		LING 300, LING 311
-% LING 410	ARTS		LING 311
-% LING 421	ARTS		LING 300
-% LING 425	ARTS		LING 327 or PHIL 220
-% LING 431	ARTS		LING 300, LING 311
-% LING 432	ARTS		LING 431
-% LING 447	ARTS
-% LING 451	ARTS		LING 222, LING 311
-% LING 452	ARTS		LING 222, LING 300	
 
 % isEligible(X) is true if the user has taken all required courses.
 isEligible(X) :-
