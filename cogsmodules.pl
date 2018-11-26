@@ -1,3 +1,5 @@
+:- use_module(library(aggregate)).
+
 % ALL MODULES:
 % Course    Faculty     Prereqs											Equivalents
 % ANTH 417  ARTS		ANTH 100, LING 200
@@ -86,7 +88,7 @@
 % STAT 344	SCIENCE		ONE OF: STAT 200, 241, 251, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PSYC 218, 278, 366 COREQS: MATH 302, or STAT 302
 % STAT 406	SCIENCE		STAT 306 or CPSC 340
 
-:- dynamic hasTaken/0.
+:- dynamic hasTaken/1.
 
 % faculty(course(A,B),C) is true if course(A,B) is in faculty C
 faculty(course(anth, _),arts).
@@ -188,5 +190,99 @@ isModule(course(stat,302)).
 isModule(course(stat,306)).
 isModule(course(stat,344)).
 isModule(course(stat,406)).
+	
+% requires(X,Y) is true if course X requires courses Y
+requires(course(anth,417),[course(ling,200),course(anth,100)]).
+requires(course(audi,402),[Y]) :- member(Y,[course(psyc,367),course(psyc,368),course(ling,313),course(ling,314)]).
+requires(course(audi,403),[course(ling,200),course(ling,201),course(audi,402)]).
+requires(course(biol,361),[course(biol,200)]).
+requires(course(biol,455),[Y]) :- member(Y,[course(biol,361),course(biol,362),course(biol,364),course(caps,301),course(psyc,360)]).					
+requires(course(biol,459),[course(psyc,455)]).
+requires(course(cpsc,304),[course(cpsc,221),Y]) :- member(Y,[course(cpsc,210),course(eece,210),course(eece,309)]).
+requires(course(cpsc,304),[course(cpsc,260),course(eece,320),Y]) :- member(Y,[course(cpsc,210),course(eece,210),course(eece,309)]).
+requires(course(cpsc,310),[course(cpsc,210)]).
+requires(course(cpsc,311),[course(cpsc,210)]).
+requires(course(cpsc,312),[Y]) :- member(Y,[course(cpsc,210),course(eece,210),course(eece,309),course(cpen,221)]).
+requires(course(cpsc,313),[course(cpsc,213),course(cpsc,221)]).
+requires(course(cpsc,313),[course(cpsc,210),course(cpsc,213),cpurse(cpsc,260),course(eece,320)]).
+requires(course(cpsc,314),[course(cpsc,221),X,Y]) :- 
+	member(X,[course(math,200),course(math,253)]),
+	member(Y,[course(math,152),course(math,221),course(math,223)]).
+requires(course(cpsc,314),[course(cpsc,260),course(eece,320),X,Y]) :- 
+	member(X,[course(math,200),course(math,253)]),
+	member(Y,[course(math,152),course(math,221),course(math,223)]).
+requires(course(cpsc,317),[course(cpsc,213),course(cpsc,221)]).
+requires(course(cpsc,317),[course(cpsc,213),course(cpsc,210),course(cpsc,260),course(eece,320)]).
+requires(course(cpsc,319),[course(cpsc,310)]).
 
+% Ask in office hours
+requires(course(cpsc,320),[course(cpsc,221),course(X,Y),course(A,B)]) :-
+	member(X,[stat,math]),
+	member(A,[stat,math]),
+	number(Y),
+	number(B),
+	Y >= 200,
+	B >= 200.
+requires(course(cpsc,320),[course(cpsc,260),course(eece,320),course(X,Y),course(A,B)]) :-
+	member(X,[stat,math]),
+	member(A,[stat,math]),
+	number(Y),
+	number(B),
+	Y >= 200,
+	B >= 200.
+
+requires(course(cpsc,322),[course(cpsc,221),Y]) :- member(Y,[course(cpsc,210),course(eece,210),course(eece,309)]).
+requires(course(cpsc,322),[course(cpsc,260),course(eece,320),Y]) :- member(Y,[course(cpsc,210),course(eece,210),course(eece,309)]).		
+requires(course(cpsc,340),[course(cpsc,221),X,Y]) :-
+	member(X,[course(math,152),course(math,221),course(math,223)]),
+	member(Y,[course(math,302),course(math,318),course(biol,300),course(stat,200),course(stat,203),course(stat,241),course(stat,251),course(stat,302)]).
+requires(course(cpsc,340),[course(cpsc,260),course(eece,320),X,Y,Z]) :-
+	member(X,[course(math,152),course(math,221),course(math,223)]),
+	member(Y,[course(math,302),course(math,318),course(biol,300),course(stat,200),course(stat,203),course(stat,241),course(stat,251),course(stat,302)]),
+	member(Z,[course(cpsc,210),course(eece,210),course(eece,309)]).
+requires(course(cpsc,344),[Y]) :- member(Y,[course(cpsc,213),course(eece,210),course(eece,309),course(cpen,221)]).
+requires(course(cpsc,404),[course(cpsc,304),course(cpsc,213)]).	
+requires(course(cpsc,404),[course(cpsc,304),course(cpsc,261)]).	
+requires(course(cpsc,404),[X,Y]) :-
+	member(X,[course(cpsc,313),course(eece,315),course(cpen,331)]),
+	member(Y,[course(cpsc,317),course(eece,358),course(elec,331)]).
+requires(course(cpsc,420),[course(cpsc,320)]).
+requires(course(cpsc,421),[course(cpsc,221)]).
+requires(course(cpsc,421),[course(cpsc,260),course(eece,320)]).
+requires(course(cpsc,422),[course(cpsc,312),course(cpsc,322)]).
+requires(course(cpsc,425),[course(math,200),course(math,221),course(cpsc,221)]).
+requires(course(cpsc,425),[course(math,200),course(math,221),course(cpsc,360),course(eece,320)]).
+
+% also 3rd year standing
+requires(course(cpsc,430),[course(cpsc,X)]) :-
+	number(X).
+
+requires(course(cpsc,444),[course(cpsc,310),course(cpsc,344),course(stat,200)]).
+requires(course(cpsc,444),[course(cpsc,310),course(cpsc,344),course(stat,241)]).
+requires(course(cpsc,445),[course(cpsc,320),course(biol,X),course(biol,Y)]) :-
+	dif(X,Y).
+
+% LING 300	ARTS		LING 201
+% LING 311	ARTS		LING 200
+% LING 313	ARTS		LING 200
+% LING 314	ARTS		LING 313
+% LING 319	ARTS		LING 200, LING 201
+% LING 327	ARTS		LING 201
+% LING 345	ARTS		ONE OF: LING 201, ENGL 331, PHIL 220
+% LING 405	ARTS		LING 300, LING 311
+% LING 410	ARTS		LING 311
+% LING 421	ARTS		LING 300
+% LING 425	ARTS		LING 327 or PHIL 220
+% LING 431	ARTS		LING 300, LING 311
+% LING 432	ARTS		LING 431
+% LING 447	ARTS
+% LING 451	ARTS		LING 222, LING 311
+% LING 452	ARTS		LING 222, LING 300	
+
+% isEligible(X) is true if the user has taken all required courses.
+isEligible(X) :-
+	requires(X,Y),
+	foreach(member(H,Y),hasTaken(H)).
+isEligible(X) :-
+	\+ requires(X,_).
 % TODO: refactor to rdf? could be our extra thing and would handle a lot of features much better
