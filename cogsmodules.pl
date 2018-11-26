@@ -189,4 +189,4 @@ isModule(course(stat,306)).
 isModule(course(stat,344)).
 isModule(course(stat,406)).
 
-=(course(phil,371),course(asia,371)).
+% TODO: refactor to rdf? could be our extra thing and would handle a lot of features much better
