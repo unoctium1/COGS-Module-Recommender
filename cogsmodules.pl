@@ -282,7 +282,66 @@ requires(course(ling,431),[course(ling,300),course(ling,311)]).
 requires(course(ling,432),[course(ling,431)]).
 requires(course(ling,451),[course(ling,222),course(ling,311)]).
 requires(course(ling,452),[course(ling,222),course(ling,300)]).
+requires(course(math,302),[Y]) :- member(Y,[course(math,200),course(math,217),course(math,226),course(math,253),course(math,263)]).
+requires(course(math,303),[course(math,302)]).
+requires(course(math,303),[course(stat,302)]).
+requires(course(math,344),[course(math,223)]).
+requires(course(math,344),[X,Y]) :-
+	member(X,[course(math,152),course(math,221)]),
+	member(Y,[course(math,220),course(math,226),course(cpsc,121)]).
+requires(course(math,443),[X,course(math,Y),course(math,Z)]) :-
+	member(X,[course(math,220),course(math,226),course(cpsc,121)]),
+	dif(Y,Z),
+	number(Y),
+	number(Z),
+	Y >= 300,
+	Z >= 300.
+requires(course(mech,421),[course(mech,366),course(mech,420)]).
+requires(course(musc,320),[course(musc,319)]).
+requires(course(musc,415),[course(musc,201),course(musc,210)]).
+requires(course(phil,320),[course(phil,220)]).
+requires(course(phil,321),[course(phil,220)]).
+requires(course(phil,321),[course(phil,125)]).
+requires(course(phil,322),[course(phil,220)]).
+requires(course(phil,323),[course(phil,220)]).
+requires(course(phil,326),[course(phil,220),course(A,B),course(C,D)]) :-
+	member(A,[phil,ling]),
+	member(C,[phil,ling]),
+	number(B),
+	number(D),
+	B >= 200,
+	D >= 200.
+requires(course(phil,326),[course(ling,201),course(A,B),course(C,D)]) :-
+	member(A,[phil,ling]),
+	member(C,[phil,ling]),
+	number(B),
+	number(D),
+	B >= 200,
+	D >= 200.
 
+% PHIL 441	ARTS		PHIL 240 or COGS 200 and 3 200-level PHIL credits
+% PHIL 450	ARTS		9 200-level PHIL credits
+% PHIL 451	ARTS		PHIL 240 or COGS 200 and 3 200-level PHIL credits
+% PHIL 455	ARTS		PHIL 240 or COGS 200 and 3 200-level PHIL credits
+% PHIL 470	ARTS															ASIA 470
+% PSYC 304	ARTS		PSYC 100 or PSYC 101, 102, or TWO OF: PSYC 207, 208, 217, 218, or PSYC 260
+% PSYC 309	ARTS		PSYC 100 or PSYC 101, 102, or 6 200-level PSYC credits
+% PSYC 321	ARTS		PSYC 100 or TWO OF: PSYC 101, 102, 205, 207, 208, 216, 217
+% PSYC 333	ARTS		PSYC 100 or PSYC 101, 102 or 6 200-level PSYC credits
+% PSYC 336	ARTS		PYSC 100 or PSYC 101, 102 or ENGL 329 or LING 420 or LING 200, 201
+% PSYC 359	ARTS		PSYC 217, 218 or PSYC 366
+% PSYC 366	ARTS		PYSC 260
+% PSYC 367	ARTS		PSYC 100 or PSYC 101, 102, or 6 200-level PSYC credits
+% PSYC 368	ARTS		PSYC 367
+% PSYC 370	ARTS		ONE OF: PSYC 260, 270 and ONE OF: PSYC 217, 277, and ONE OF: PSYC 218, 278
+% PSYC 371	ARTS		PSYC 370
+% PSYC 460	ARTS		ONE OF: PSYC 304, 360
+% PSYC 461	ARTS		ONE OF: PSYC 304, 360, 460
+% PSYC 462	ARTS		ONE OF: PSYC 304, 360
+% STAT 302	SCIENCE		ONE OF: MATH 200, 226, 217, 253, 263				MATH 302
+% STAT 306	SCIENCE		ONE OF: MATH 152, 221, 223, and ONE OF: MATH 302, STAT 302 and ONE OF: STAT 200, 241, 251, 300, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PYSC 218, 278, 366
+% STAT 344	SCIENCE		ONE OF: STAT 200, 241, 251, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PSYC 218, 278, 366 COREQS: MATH 302, or STAT 302
+% STAT 406	SCIENCE		STAT 306 or CPSC 340
 
 % isEligible(X) is true if the user has taken all required courses.
 isEligible(X) :-
@@ -290,4 +349,11 @@ isEligible(X) :-
 	foreach(member(H,Y),hasTaken(H)).
 isEligible(X) :-
 	\+ requires(X,_).
+	
+% Equivalent courses: hasTaken(X) is true if an equivalent course has been taken	TODO: figure out how to get this to work both ways
+% hasTaken(course(math,302)) :- hasTaken(course(stat,302)).
+% hasTaken(course(asia,371)) :- hasTaken(course(phil,371)).
+% hasTaken(course(asia,378)) :- hasTaken(course(phil,378)).
+% hasTaken(course(asia,470)) :- hasTaken(course(phil,470)).
+
 % TODO: refactor to rdf? could be our extra thing and would handle a lot of features much better
