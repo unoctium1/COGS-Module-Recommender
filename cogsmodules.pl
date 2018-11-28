@@ -196,7 +196,9 @@ isModule(course(stat,306)).
 isModule(course(stat,344)).
 isModule(course(stat,406)).
 
-course(cpsc, 100).
+course(cpsc, 110).
+course(cpsc,210).
+requires(course(cpsc, 210), course(cpsc, 110)).
 	
 % requires(X,Y) is true if course X requires courses Y
 requires(course(anth,417),[course(ling,200),course(anth,100)]).
@@ -407,13 +409,13 @@ mp(T,T,_).
 %reln([the,capital,of | T],T,O1,O2) :- capital(O2,O1).
 %reln([next,to | T],T,O1,O2) :- borders(O1,O2).
 
-adj([faculty | T], T, Obj) :- faculty(_, faculty).
+adj([faculty, of, Fac | T], T, Obj) :- faculty(Obj, Fac).
 
-% noun([course, Department, Number | T],T,course(Department, Number)) :- course(Department, Number).
+noun([course, Department, Number | T],T,course(Department, Number)) :- course(Department, Number).
 noun([course | T], T, course(Department, Number)) :- course(Department, Number).
 noun([module, course | T], T, Obj) :- isModule(Obj).
 
-reln([requires | T], T, O1, O2) :- requires(O1, O2).
+reln([required, for | T], T, Obj, Course) :- requires(Course, Obj).
 
 % question(Question,QR,Object) is true if Query provides an answer about Object to Question
 question(['Is' | T0],T2,Obj) :-
