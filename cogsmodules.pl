@@ -1,3 +1,5 @@
+:- module(cogsmodules).
+
 :- use_module(library(aggregate)).
 :- use_module(library(apply)).
 
