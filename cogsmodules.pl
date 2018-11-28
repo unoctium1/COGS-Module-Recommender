@@ -322,11 +322,12 @@ requires(course(cpsc,314),[course(cpsc,260),course(eece,320),X,Y]) :-
 requires(course(cpsc,317),[course(cpsc,213),course(cpsc,221)]).
 requires(course(cpsc,317),[course(cpsc,213),course(cpsc,210),course(cpsc,260),course(eece,320)]).
 requires(course(cpsc,319),[course(cpsc,310)]).
-
-% Ask in office hours
 requires(course(cpsc,320),[course(cpsc,221),course(X,Y),course(A,B)]) :-
 	member(X,[stat,math]),
 	member(A,[stat,math]),
+	course(X,Y),
+	course(A,B),
+	dif(course(X,Y),course(A,B)),
 	number(Y),
 	number(B),
 	Y >= 200,
@@ -334,11 +335,13 @@ requires(course(cpsc,320),[course(cpsc,221),course(X,Y),course(A,B)]) :-
 requires(course(cpsc,320),[course(cpsc,260),course(eece,320),course(X,Y),course(A,B)]) :-
 	member(X,[stat,math]),
 	member(A,[stat,math]),
+	course(X,Y),
+	course(A,B),
+	dif(course(X,Y),course(A,B)),
 	number(Y),
 	number(B),
 	Y >= 200,
 	B >= 200.
-
 requires(course(cpsc,322),[course(cpsc,221),Y]) :- member(Y,[course(cpsc,210),course(eece,210),course(eece,309)]).
 requires(course(cpsc,322),[course(cpsc,260),course(eece,320),Y]) :- member(Y,[course(cpsc,210),course(eece,210),course(eece,309)]).		
 requires(course(cpsc,340),[course(cpsc,221),X,Y]) :-
@@ -361,13 +364,15 @@ requires(course(cpsc,422),[course(cpsc,312),course(cpsc,322)]).
 requires(course(cpsc,425),[course(math,200),course(math,221),course(cpsc,221)]).
 requires(course(cpsc,425),[course(math,200),course(math,221),course(cpsc,360),course(eece,320)]).
 
-% also 3rd year standing
+% also 3rd year standing, prolly just shouldn't bother with that tho
 requires(course(cpsc,430),[course(cpsc,X)]) :-
-	number(X).
+	course(cpsc,X).
 
 requires(course(cpsc,444),[course(cpsc,310),course(cpsc,344),course(stat,200)]).
 requires(course(cpsc,444),[course(cpsc,310),course(cpsc,344),course(stat,241)]).
 requires(course(cpsc,445),[course(cpsc,320),course(biol,X),course(biol,Y)]) :-
+	course(biol,X),
+	course(biol,Y),
 	dif(X,Y).
 requires(course(ling,300),[course(ling,201)]).
 requires(course(ling,311),[course(ling,200)]).
@@ -394,8 +399,9 @@ requires(course(math,344),[X,Y]) :-
 	member(Y,[course(math,220),course(math,226),course(cpsc,121)]).
 requires(course(math,443),[X,course(math,Y),course(math,Z)]) :-
 	member(X,[course(math,220),course(math,226),course(cpsc,121)]),
+	course(math,Y),
+	course(math,Z),
 	dif(Y,Z),
-	number(Y),
 	number(Z),
 	Y >= 300,
 	Z >= 300.
@@ -410,37 +416,39 @@ requires(course(phil,323),[course(phil,220)]).
 requires(course(phil,326),[course(phil,220),course(A,B),course(C,D)]) :-
 	member(A,[phil,ling]),
 	member(C,[phil,ling]),
-	number(B),
-	number(D),
+	course(A,B),
+	course(C,D),
+	dif(course(A,B),course(C,D)),
 	B >= 200,
 	D >= 200.
 requires(course(phil,326),[course(ling,201),course(A,B),course(C,D)]) :-
 	member(A,[phil,ling]),
 	member(C,[phil,ling]),
-	number(B),
-	number(D),
+	course(A,B),
+	course(C,D),
+	dif(course(A,B),course(C,D)),
 	B >= 200,
 	D >= 200.
 requires(course(phil,441),[course(phil,240)]).
 requires(course(phil,441),[course(cogs,200),course(phil,X)]) :-
-	number(X),
+	course(phil,X),
 	X >= 200.
 requires(course(phil,450),[course(phil,X),course(phil,Y),course(phil,Z)]) :-
+	course(phil,X),
+	course(phil,Y),
+	course(phil,Z),
 	dif(X,Y),
 	dif(Y,Z),
 	dif(X,Z),
-	number(X),
-	number(Y),
-	number(Z),
 	Y >= 200,
 	Z >= 200,
 	X >= 200.
 requires(course(phil,451),[course(cogs,200),course(phil,X)]) :-
-	number(X),
+	course(phil,X),
 	X >= 200.
 requires(course(phil,451),[course(phil,240)]).
 requires(course(phil,455),[course(cogs,200),course(phil,X)]) :-
-	number(X),
+	course(phil,X),
 	X >= 200.
 requires(course(phil,455),[course(phil,240)]).
 requires(course(psyc,304),[course(psyc,100)]).
@@ -452,8 +460,8 @@ requires(course(psyc,309),[course(psyc,100)]).
 requires(course(psyc,309),[course(psyc,101),course(psyc,102)]).
 requires(course(psyc,309),[course(psyc,X),course(psyc,Y)]) :-
 	dif(X,Y),
-	number(X),
-	number(Y),
+	course(psyc,X),
+	course(psyc,Y),
 	X >= 200,
 	Y >= 200.
 requires(course(psyc,321),[course(psyc,100)]).
@@ -465,8 +473,8 @@ requires(course(psyc,333),[course(psyc,100)]).
 requires(course(psyc,333),[course(psyc,101),course(psyc,102)]).
 requires(course(psyc,333),[course(psyc,X),course(psyc,Y)]) :-
 	dif(X,Y),
-	number(X),
-	number(Y),
+	course(psyc,X),
+	course(psyc,Y),
 	X >= 200,
 	Y >= 200.	
 requires(course(psyc,336),[course(psyc,100)]).
@@ -481,8 +489,8 @@ requires(course(psyc,367),[course(psyc,100)]).
 requires(course(psyc,367),[course(psyc,101),course(psyc,102)]).
 requires(course(psyc,367),[course(psyc,X),course(psyc,Y)]) :-
 	dif(X,Y),
-	number(X),
-	number(Y),
+	course(psyc,X),
+	course(psyc,Y),
 	X >= 200,
 	Y >= 200.	
 requires(course(psyc,368),[course(psyc,367)]).
