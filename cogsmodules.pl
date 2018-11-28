@@ -195,9 +195,8 @@ isModule(course(stat,306)).
 isModule(course(stat,344)).
 isModule(course(stat,406)).
 
-course(cpsc, 110).
-course(cpsc,210).
-requires(course(cpsc, 210), course(cpsc, 110)).
+
+requires(course(cpsc, 210),[course(cpsc,110)]).
 	
 % requires(X,Y) is true if course X requires courses Y
 requires(course(anth,417),[course(ling,200),course(anth,100)]).
@@ -404,13 +403,6 @@ requires(course(stat,344),[X,course(math,302)]) :-
 	member(X,[course(stat,200),course(stat,241),course(stat,251),course(stat,300),course(biol,300),course(comm,291),course(econ,325),course(econ,327),course(frst,231),course(psyc,218),course(psyc,278),course(psyc,366)]).
 requires(course(stat,406),[course(math,306)]).
 requires(course(stat,406),[course(cpsc,340)]).
-
-% isEligible(X) is true if the user has taken all required courses.
-isEligible(X,L) :-
-	(requires(X,Y);isEquiv(X,Z),requires(Z,Y)),
-	foreach(member(H,Y),(hasTaken(H,L); isEquiv(H,I),hasTaken(I,L))).
-isEligible(X,_) :-
-	\+ requires(X,_).
 	
 % Equivalent courses: hasTaken(X) is true if an equivalent course has been taken	TODO: figure out how to get this to work both ways
 isEquiv(course(math,302),course(stat,302)).
@@ -425,16 +417,39 @@ isEquiv(X,Y) :- \+ dif(X,Y).
 
 % coursesToTake(X,C,L) is true if C are pre reqs needed for X that haven't been taken. CoursesToTake(X,_) is false if isEligible(X) is true.
 
-coursesToTake(X,C,L) :-
-	\+ isEligible(X,L),
-	requires(X,Y),
-	filterMembers(Y,L,C).
-	
+%coursesToTake(X,C,L) :-
+%	\+ isEligible(X,L),
+%	requires(X,Y),
+%	filterMembers(Y,L,C).
 
+% isEligible(X,L) is true if the user has taken all required courses.
+isEligible(X,L) :-
+	(requires(X,Y);isEquiv(X,Z),requires(Z,Y)),
+	foreach(member(H,Y),(hasTaken(H,L); isEquiv(H,I),hasTaken(I,L))).
+isEligible(X,_) :-
+	\+ requires(X,_).
 	
 hasTaken(C,L) :- member(C,L).
 
-% TODO: refactor to rdf? could be our extra thing and would handle a lot of features much better
+newUser :- go([]).
+
+% main program loop, where L are all courses taken by the user
+go(L) :-
+	addCourses(LN),
+	append(L,LN,Courses),
+	q(X,Courses),
+	write(X),
+	go(Courses).
+
+% Queries users for new courses
+addCourses([X|L]) :-
+	write('Type courses taken in the form course(dept,123), or done if no more courses'), nl,
+	read(X),
+	dif(X,done),
+	addCourses(L).
+addCourses([]).	
+
+% NLP
 
 % noun_phrase(T0,T4,Ind) is true if
 %  T0 and T4 are list of words, such that
@@ -444,11 +459,11 @@ hasTaken(C,L) :- member(C,L).
 
 % A noun phrase is a determiner followed by adjectives followed
 % by a noun followed by an optional modifying phrase:
-noun_phrase(T0,T4,Ind) :-
+noun_phrase(T0,T4,Ind,St) :-
     det(T0,T1,Ind),
-    adjectives(T1,T2,Ind),
-    noun(T2,T3,Ind),
-    mp(T3,T4,Ind).
+    adjectives(T1,T2,Ind,St),
+    noun(T2,T3,Ind,St),
+    mp(T3,T4,Ind,St).
 
 % Determiners (articles) are ignored in this oversimplified example.
 % They do not provide any extra constraints.
@@ -458,21 +473,21 @@ det(T,T,_).
 
 % adjectives(T0,T1,Ind) is true if 
 % T0-T1 is an adjective is true of Ind
-adjectives(T0,T2,Ind) :-
-    adj(T0,T1,Ind),
-    adjectives(T1,T2,Ind).
-adjectives(T,T,_).
+adjectives(T0,T2,Ind,St) :-
+    adj(T0,T1,Ind,St),
+    adjectives(T1,T2,Ind,St).
+adjectives(T,T,_,_).
 
 % An optional modifying phrase / relative clause is either
 % a relation (verb or preposition) followed by a noun_phrase or
 % 'that' followed by a relation then a noun_phrase or
 % nothing 
-mp(T0,T2,Subject) :-
-    reln(T0,T1,Subject,Object),
-    noun_phrase(T1,T2,Object).
-mp([that|T0],T2,Subject) :-
-    reln(T0,T1,Subject,Object),
-    noun_phrase(T1,T2,Object).
+mp(T0,T2,Subject,St) :-
+    reln(T0,T1,Subject,Object,St),
+    noun_phrase(T1,T2,Object,St).
+mp([that|T0],T2,Subject,St) :-
+    reln(T0,T1,Subject,Object,St),
+    noun_phrase(T1,T2,Object,St).
 mp(T,T,_).
 
 % DICTIONARY
@@ -483,34 +498,34 @@ mp(T,T,_).
 %reln([the,capital,of | T],T,O1,O2) :- capital(O2,O1).
 %reln([next,to | T],T,O1,O2) :- borders(O1,O2).
 
-adj([faculty, of, Fac | T], T, Obj) :- faculty(Obj, Fac).
+adj([faculty, of, Fac | T], T, Obj,_) :- faculty(Obj, Fac).
 
-noun([course, Department, Number | T],T,course(Department, Number)) :- course(Department, Number).
-noun([course | T], T, course(Department, Number)) :- course(Department, Number).
-noun([module, course | T], T, Obj) :- isModule(Obj).
+noun([course, Department, Number | T],T,course(Department, Number),_).
+noun([course | T], T, course(Department, Number),_).
+noun([module, course | T], T, Obj,_) :- isModule(Obj).
 
-reln([required, for | T], T, Obj, Course) :- requires(Course, Obj).
+reln([required, for | T], T, Obj, Course,_) :- requires(Course, Obj).
 
 % question(Question,QR,Object) is true if Query provides an answer about Object to Question
-question(['Is' | T0],T2,Obj) :-
-    noun_phrase(T0,T1,Obj),
-    mp(T1,T2,Obj).
-question(['What',is | T0], T1, Obj) :-
-    mp(T0,T1,Obj).
-question(['What',is | T0],T1,Obj) :-
-    noun_phrase(T0,T1,Obj).
-question(['What' | T0],T2,Obj) :-
-    noun_phrase(T0,T1,Obj),
-    mp(T1,T2,Obj).
+question(['Is' | T0],T2,Obj,St) :-
+    noun_phrase(T0,T1,Obj,St),
+    mp(T1,T2,Obj,St).
+question(['What',is | T0], T1, Obj,St) :-
+    mp(T0,T1,Obj,St).
+question(['What',is | T0],T1,Obj,St) :-
+    noun_phrase(T0,T1,Obj,St).
+question(['What' | T0],T2,Obj,St) :-
+    noun_phrase(T0,T1,Obj,St),
+    mp(T1,T2,Obj,St).
 
 % ask(Q,A) gives answer A to question Q
-ask(Q,A) :-
-    question(Q,[],A).
+ask(Q,A,St) :-
+    question(Q,[],A,St).
 	
 % To get the input from a line:
 
-q(Ans) :-
+q(Ans,St) :-
     write("Ask me: "), flush_output(current_output),
     readln(Ln),
-    question(Ln,End,Ans),
+    question(Ln,End,Ans,St),
     member(End,[[],['?'],['.']]).
