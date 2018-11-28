@@ -194,6 +194,10 @@ isModule(course(stat,302)).
 isModule(course(stat,306)).
 isModule(course(stat,344)).
 isModule(course(stat,406)).
+
+course(cpsc, 110).
+course(cpsc,210).
+requires(course(cpsc, 210), course(cpsc, 110)).
 	
 % requires(X,Y) is true if course X requires courses Y
 requires(course(anth,417),[course(ling,200),course(anth,100)]).
@@ -431,3 +435,82 @@ coursesToTake(X,C,L) :-
 hasTaken(C,L) :- member(C,L).
 
 % TODO: refactor to rdf? could be our extra thing and would handle a lot of features much better
+
+% noun_phrase(T0,T4,Ind) is true if
+%  T0 and T4 are list of words, such that
+%        T4 is an ending of T0
+%        the words in T0 before T4 (written T0-T4) form a noun phrase
+%  Ind is an individual that the noun phrase is referring to
+
+% A noun phrase is a determiner followed by adjectives followed
+% by a noun followed by an optional modifying phrase:
+noun_phrase(T0,T4,Ind) :-
+    det(T0,T1,Ind),
+    adjectives(T1,T2,Ind),
+    noun(T2,T3,Ind),
+    mp(T3,T4,Ind).
+
+% Determiners (articles) are ignored in this oversimplified example.
+% They do not provide any extra constraints.
+det([the | T],T,_).
+det([a | T],T,_).
+det(T,T,_).
+
+% adjectives(T0,T1,Ind) is true if 
+% T0-T1 is an adjective is true of Ind
+adjectives(T0,T2,Ind) :-
+    adj(T0,T1,Ind),
+    adjectives(T1,T2,Ind).
+adjectives(T,T,_).
+
+% An optional modifying phrase / relative clause is either
+% a relation (verb or preposition) followed by a noun_phrase or
+% 'that' followed by a relation then a noun_phrase or
+% nothing 
+mp(T0,T2,Subject) :-
+    reln(T0,T1,Subject,Object),
+    noun_phrase(T1,T2,Object).
+mp([that|T0],T2,Subject) :-
+    reln(T0,T1,Subject,Object),
+    noun_phrase(T1,T2,Object).
+mp(T,T,_).
+
+% DICTIONARY
+%adj([large | T],T,Obj) :- large(Obj).
+%adj([Lang,speaking | T],T,Obj) :- speaks(Obj,Lang).
+
+%reln([borders | T],T,O1,O2) :- borders(O1,O2).
+%reln([the,capital,of | T],T,O1,O2) :- capital(O2,O1).
+%reln([next,to | T],T,O1,O2) :- borders(O1,O2).
+
+adj([faculty, of, Fac | T], T, Obj) :- faculty(Obj, Fac).
+
+noun([course, Department, Number | T],T,course(Department, Number)) :- course(Department, Number).
+noun([course | T], T, course(Department, Number)) :- course(Department, Number).
+noun([module, course | T], T, Obj) :- isModule(Obj).
+
+reln([required, for | T], T, Obj, Course) :- requires(Course, Obj).
+
+% question(Question,QR,Object) is true if Query provides an answer about Object to Question
+question(['Is' | T0],T2,Obj) :-
+    noun_phrase(T0,T1,Obj),
+    mp(T1,T2,Obj).
+question(['What',is | T0], T1, Obj) :-
+    mp(T0,T1,Obj).
+question(['What',is | T0],T1,Obj) :-
+    noun_phrase(T0,T1,Obj).
+question(['What' | T0],T2,Obj) :-
+    noun_phrase(T0,T1,Obj),
+    mp(T1,T2,Obj).
+
+% ask(Q,A) gives answer A to question Q
+ask(Q,A) :-
+    question(Q,[],A).
+	
+% To get the input from a line:
+
+q(Ans) :-
+    write("Ask me: "), flush_output(current_output),
+    readln(Ln),
+    question(Ln,End,Ans),
+    member(End,[[],['?'],['.']]).
