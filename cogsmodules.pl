@@ -91,6 +91,105 @@
 % STAT 344	SCIENCE		ONE OF: STAT 200, 241, 251, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PSYC 218, 278, 366 COREQS: MATH 302, or STAT 302
 % STAT 406	SCIENCE		STAT 306 or CPSC 340
 
+% course(X,Y) is true if Y is a valid course code in a department.
+course(anth,100).
+course(anth,417).
+course(asia,371).
+course(asia,378).
+course(asia,470).
+course(audi,402).
+course(audi,403).
+course(biol,361).
+course(biol,455).
+course(biol,458).
+course(biol,459).
+course(cpsc,110).
+course(cpsc,121).
+course(cpsc,210).
+course(cpsc,221).
+course(cpsc,304).
+course(cpsc,310).
+course(cpsc,311).
+course(cpsc,312).
+course(cpsc,313).
+course(cpsc,314).
+course(cpsc,317).
+course(cpsc,319).
+course(cpsc,320).
+course(cpsc,322).
+course(cpsc,340).
+course(cpsc,344).
+course(cpsc,404).
+course(cpsc,416).
+course(cpsc,420).
+course(cpsc,421).
+course(cpsc,422).
+course(cpsc,425).
+course(cpsc,430).
+course(cpsc,444).
+course(cpsc,445).
+course(ling,100).
+course(ling,101).
+course(ling,200).
+course(ling,201).
+course(ling,300).
+course(ling,311).
+course(ling,313).
+course(ling,314).
+course(ling,319).
+course(ling,327).
+course(ling,345).
+course(ling,405).
+course(ling,410).
+course(ling,421).
+course(ling,425).
+course(ling,431).
+course(ling,432).
+course(ling,447).
+course(ling,451).
+course(ling,452).
+course(math,302).
+course(math,303).
+course(math,344).
+course(math,443).
+course(mech,421).
+course(musc,320).
+course(musc,415).
+course(phil,320).
+course(phil,321).
+course(phil,322).
+course(phil,323).
+course(phil,326).
+course(phil,333).
+course(phil,340).
+course(phil,369).
+course(phil,441).
+course(phil,450).
+course(phil,451).
+course(phil,455).
+course(phil,470).
+course(psyc,304).
+course(psyc,309).
+course(psyc,321).
+course(psyc,333).
+course(psyc,336).
+course(psyc,359).
+course(psyc,366).
+course(psyc,367).
+course(psyc,368).
+course(psyc,370).
+course(psyc,371).
+course(psyc,460).
+course(psyc,461).
+course(psyc,462).
+course(stat,200).
+course(stat,241).
+course(stat,302).
+course(stat,306).
+course(stat,344).
+course(stat,406).
+
+
 % faculty(course(A,B),C) is true if course(A,B) is in faculty C
 faculty(course(anth, _),arts).
 faculty(course(asia, _),arts).
@@ -490,7 +589,7 @@ mp(T0,T2,Subject,St) :-
 mp([that|T0],T2,Subject,St) :-
     reln(T0,T1,Subject,Object,St),
     noun_phrase(T1,T2,Object,St).
-mp(T,T,_).
+mp(T,T,_,_).
 
 % DICTIONARY
 %adj([large | T],T,Obj) :- large(Obj).
