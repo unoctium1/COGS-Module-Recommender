@@ -1,4 +1,5 @@
 :- use_module(library(aggregate)).
+:- use_module(library(apply)).
 
 % ALL MODULES:
 % Course    Faculty     Prereqs											Equivalents
@@ -87,8 +88,6 @@
 % STAT 306	SCIENCE		ONE OF: MATH 152, 221, 223, and ONE OF: MATH 302, STAT 302 and ONE OF: STAT 200, 241, 251, 300, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PYSC 218, 278, 366
 % STAT 344	SCIENCE		ONE OF: STAT 200, 241, 251, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PSYC 218, 278, 366 COREQS: MATH 302, or STAT 302
 % STAT 406	SCIENCE		STAT 306 or CPSC 340
-
-:- dynamic hasTaken/1.
 
 % faculty(course(A,B),C) is true if course(A,B) is in faculty C
 faculty(course(anth, _),arts).
@@ -318,42 +317,117 @@ requires(course(phil,326),[course(ling,201),course(A,B),course(C,D)]) :-
 	number(D),
 	B >= 200,
 	D >= 200.
-
-% PHIL 441	ARTS		PHIL 240 or COGS 200 and 3 200-level PHIL credits
-% PHIL 450	ARTS		9 200-level PHIL credits
-% PHIL 451	ARTS		PHIL 240 or COGS 200 and 3 200-level PHIL credits
-% PHIL 455	ARTS		PHIL 240 or COGS 200 and 3 200-level PHIL credits
-% PHIL 470	ARTS															ASIA 470
-% PSYC 304	ARTS		PSYC 100 or PSYC 101, 102, or TWO OF: PSYC 207, 208, 217, 218, or PSYC 260
-% PSYC 309	ARTS		PSYC 100 or PSYC 101, 102, or 6 200-level PSYC credits
-% PSYC 321	ARTS		PSYC 100 or TWO OF: PSYC 101, 102, 205, 207, 208, 216, 217
-% PSYC 333	ARTS		PSYC 100 or PSYC 101, 102 or 6 200-level PSYC credits
-% PSYC 336	ARTS		PYSC 100 or PSYC 101, 102 or ENGL 329 or LING 420 or LING 200, 201
-% PSYC 359	ARTS		PSYC 217, 218 or PSYC 366
-% PSYC 366	ARTS		PYSC 260
-% PSYC 367	ARTS		PSYC 100 or PSYC 101, 102, or 6 200-level PSYC credits
-% PSYC 368	ARTS		PSYC 367
-% PSYC 370	ARTS		ONE OF: PSYC 260, 270 and ONE OF: PSYC 217, 277, and ONE OF: PSYC 218, 278
-% PSYC 371	ARTS		PSYC 370
-% PSYC 460	ARTS		ONE OF: PSYC 304, 360
-% PSYC 461	ARTS		ONE OF: PSYC 304, 360, 460
-% PSYC 462	ARTS		ONE OF: PSYC 304, 360
-% STAT 302	SCIENCE		ONE OF: MATH 200, 226, 217, 253, 263				MATH 302
-% STAT 306	SCIENCE		ONE OF: MATH 152, 221, 223, and ONE OF: MATH 302, STAT 302 and ONE OF: STAT 200, 241, 251, 300, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PYSC 218, 278, 366
-% STAT 344	SCIENCE		ONE OF: STAT 200, 241, 251, BIOL 300, COMM 291, ECON 325, 327, FRST 231, PSYC 218, 278, 366 COREQS: MATH 302, or STAT 302
-% STAT 406	SCIENCE		STAT 306 or CPSC 340
+requires(course(phil,441),[course(phil,240)]).
+requires(course(phil,441),[course(cogs,200),course(phil,X)]) :-
+	number(X),
+	X >= 200.
+requires(course(phil,450),[course(phil,X),course(phil,Y),course(phil,Z)]) :-
+	dif(X,Y),
+	dif(Y,Z),
+	dif(X,Z),
+	number(X),
+	number(Y),
+	number(Z),
+	Y >= 200,
+	Z >= 200,
+	X >= 200.
+requires(course(phil,451),[course(cogs,200),course(phil,X)]) :-
+	number(X),
+	X >= 200.
+requires(course(phil,451),[course(phil,240)]).
+requires(course(phil,455),[course(cogs,200),course(phil,X)]) :-
+	number(X),
+	X >= 200.
+requires(course(phil,455),[course(phil,240)]).
+requires(course(psyc,304),[course(psyc,100)]).
+requires(course(psyc,304),[X,Y]) :-
+	dif(X,Y),
+	member(X,[course(psyc,101),course(psyc,102),course(psyc,205),course(psyc,207),course(psyc,208),course(psyc,216),course(psyc,217)]),
+	member(Y,[course(psyc,101),course(psyc,102),course(psyc,205),course(psyc,207),course(psyc,208),course(psyc,216),course(psyc,217)]).
+requires(course(psyc,309),[course(psyc,100)]).
+requires(course(psyc,309),[course(psyc,101),course(psyc,102)]).
+requires(course(psyc,309),[course(psyc,X),course(psyc,Y)]) :-
+	dif(X,Y),
+	number(X),
+	number(Y),
+	X >= 200,
+	Y >= 200.
+requires(course(psyc,321),[course(psyc,100)]).
+requires(course(psyc,321),[X,Y]) :-
+	dif(X,Y),
+	member(X,[course(psyc,101),course(psyc,102),course(psyc,205),course(psyc,207),course(psyc,208),course(psyc,216),course(psyc,217)]),
+	member(Y,[course(psyc,101),course(psyc,102),course(psyc,205),course(psyc,207),course(psyc,208),course(psyc,216),course(psyc,217)]).
+requires(course(psyc,333),[course(psyc,100)]).
+requires(course(psyc,333),[course(psyc,101),course(psyc,102)]).
+requires(course(psyc,333),[course(psyc,X),course(psyc,Y)]) :-
+	dif(X,Y),
+	number(X),
+	number(Y),
+	X >= 200,
+	Y >= 200.	
+requires(course(psyc,336),[course(psyc,100)]).
+requires(course(psyc,336),[course(psyc,101),course(psyc,102)]).
+requires(course(psyc,336),[course(engl,329)]).	
+requires(course(psyc,336),[course(ling,420)]).
+requires(course(psyc,336),[course(ling,200),course(ling,201)]).
+requires(course(psyc,359),[course(psyc,366)]).
+requires(course(psyc,359),[course(psyc,217),course(psyc,218)]).
+requires(course(psyc,366),[course(psyc,260)]).	
+requires(course(psyc,367),[course(psyc,100)]).
+requires(course(psyc,367),[course(psyc,101),course(psyc,102)]).
+requires(course(psyc,367),[course(psyc,X),course(psyc,Y)]) :-
+	dif(X,Y),
+	number(X),
+	number(Y),
+	X >= 200,
+	Y >= 200.	
+requires(course(psyc,368),[course(psyc,367)]).
+requires(course(psyc,370),[X,Y,Z]) :-
+	member(X,[course(psyc,260),course(psyc,270)]),
+	member(Y,[course(psyc,217),course(psyc,277)]),
+	member(Z,[course(psyc,218),course(psyc,278)]).
+requires(course(psyc,371),[course(psyc,370)]).
+requires(course(psyc,460),[X]) :-
+	member(X,[course(psyc,304),course(psyc,360)]).
+requires(course(psyc,461),[X]) :-
+	member(X,[course(psyc,304),course(psyc,360),course(psyc,460)]).
+requires(course(psyc,462),[X]) :-
+	member(X,[course(psyc,304),course(psyc,360)]).
+requires(course(stat,306),[X,course(math,302),Z]) :-
+	member(X,[course(math,152),course(math,221),course(math,223)]),
+	member(Z,[course(stat,200),course(stat,241),course(stat,251),course(stat,300),course(biol,300),course(comm,291),course(econ,325),course(econ,327),course(frst,231),course(psyc,218),course(psyc,278),course(psyc,366)]).
+requires(course(stat,344),[X,course(math,302)]) :-
+	member(X,[course(stat,200),course(stat,241),course(stat,251),course(stat,300),course(biol,300),course(comm,291),course(econ,325),course(econ,327),course(frst,231),course(psyc,218),course(psyc,278),course(psyc,366)]).
+requires(course(stat,406),[course(math,306)]).
+requires(course(stat,406),[course(cpsc,340)]).
 
 % isEligible(X) is true if the user has taken all required courses.
-isEligible(X) :-
-	requires(X,Y),
-	foreach(member(H,Y),hasTaken(H)).
-isEligible(X) :-
+isEligible(X,L) :-
+	(requires(X,Y);isEquiv(X,Z),requires(Z,Y)),
+	foreach(member(H,Y),(hasTaken(H,L); isEquiv(H,I),hasTaken(I,L))).
+isEligible(X,_) :-
 	\+ requires(X,_).
 	
 % Equivalent courses: hasTaken(X) is true if an equivalent course has been taken	TODO: figure out how to get this to work both ways
-% hasTaken(course(math,302)) :- hasTaken(course(stat,302)).
-% hasTaken(course(asia,371)) :- hasTaken(course(phil,371)).
-% hasTaken(course(asia,378)) :- hasTaken(course(phil,378)).
-% hasTaken(course(asia,470)) :- hasTaken(course(phil,470)).
+isEquiv(course(math,302),course(stat,302)).
+isEquiv(course(stat,302),course(math,302)).
+isEquiv(course(asia,371),course(phil,371)).
+isEquiv(course(phil,371),course(asia,371)).
+isEquiv(course(asia,378),course(phil,378)).
+isEquiv(course(phil,378),course(asia,378)).
+isEquiv(course(asia,470),course(phil,470)).
+isEquiv(course(phil,470),course(asia,470)).
+isEquiv(X,Y) :- \+ dif(X,Y).
+
+% coursesToTake(X,C,L) is true if C are pre reqs needed for X that haven't been taken. CoursesToTake(X,_) is false if isEligible(X) is true.
+
+coursesToTake(X,C,L) :-
+	\+ isEligible(X,L),
+	requires(X,Y),
+	filterMembers(Y,L,C).
+	
+
+	
+hasTaken(C,L) :- member(C,L).
 
 % TODO: refactor to rdf? could be our extra thing and would handle a lot of features much better
