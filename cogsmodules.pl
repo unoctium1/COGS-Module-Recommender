@@ -109,6 +109,7 @@ course(biol,455).
 course(biol,458).
 course(biol,459).
 course(caps,301).
+course(cogs,200).
 course(cpen,221).
 course(cpen,321).
 course(cpen,331).
@@ -202,11 +203,17 @@ course(phil,326).
 course(phil,333).
 course(phil,340).
 course(phil,369).
+course(phil,371).
+course(phil,378).
 course(phil,441).
 course(phil,450).
 course(phil,451).
 course(phil,455).
 course(phil,470).
+course(psyc,100).
+course(psyc,101).
+course(psyc,102).
+course(psyc,207).
 course(psyc,304).
 course(psyc,309).
 course(psyc,321).
