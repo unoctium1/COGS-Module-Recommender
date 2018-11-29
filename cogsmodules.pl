@@ -1,4 +1,4 @@
-:- module(cogsmodules,[course/2,faculty/2,isModule/1,requires/2,newUser/0,go/1,isEquiv/2]).
+% :- module(cogsmodules,[course/2,faculty/2,isModule/1,requires/2,newUser/0,go/1,isEquiv/2]).
 
 :- use_module(library(aggregate)).
 :- use_module(library(apply)).
@@ -543,7 +543,7 @@ requires(course(psyc,333),[course(psyc,X),course(psyc,Y)]) :-
 	Y >= 200.	
 requires(course(psyc,336),[course(psyc,100)]).
 requires(course(psyc,336),[course(psyc,101),course(psyc,102)]).
-requires(course(psyc,336),[course(engl,329)]).	
+requires(course(psyc,336),[course(engl,329)]).	 
 requires(course(psyc,336),[course(ling,420)]).
 requires(course(psyc,336),[course(ling,200),course(ling,201)]).
 requires(course(psyc,359),[course(psyc,366)]).
@@ -576,6 +576,8 @@ requires(course(stat,344),[X,course(math,302)]) :-
 	member(X,[course(stat,200),course(stat,241),course(stat,251),course(stat,300),course(biol,300),course(comm,291),course(econ,325),course(econ,327),course(frst,231),course(psyc,218),course(psyc,278),course(psyc,366)]).
 requires(course(stat,406),[course(math,306)]).
 requires(course(stat,406),[course(cpsc,340)]).
+
+noReqs(X) :- \+ requires(X,_).
 	
 % Equivalent courses: hasTaken(X) is true if an equivalent course has been taken	TODO: figure out how to get this to work both ways
 isEquiv(course(math,302),course(stat,302)).
@@ -590,16 +592,35 @@ isEquiv(X,Y) :- \+ dif(X,Y).
 
 % coursesToTake(X,C,L) is true if C are pre reqs needed for X that haven't been taken. CoursesToTake(X,_) is false if isEligible(X) is true.
 
-coursesToTake(X,C,L) :-
+coursesToTake(X,C,L) :- length(C,_),coursesToTake2(X,C,L).
+
+coursesToTake2(X,C,L) :-
 	requires(X,Y),
-	forall(member(Z,Y),(\+ (member(Z,C);member(Z,L)),(member(Z,C);member(Z,L)))).
+	subtract(Y,L,C0),
+	append(C0,C1,C),
+	coursesToTakeRec(C0,C1,L).
+coursesToTake2(X,[],L) :-
+	isEligible(X,L).
+
+coursesToTake1(X,C,L) :-
+	requires(X,Y),
+	subtract(Y,L,C).
+
+coursesToTakeRec([H|T],C,L) :-
+		coursesToTake2(H,C0,L),
+		append(C0,C1,C),
+		coursesToTakeRec(T,C1,L).
+coursesToTakeRec([H|T],C,L) :-
+		isEligible(H,L),
+		coursesToTakeRec(T,C,L).
+coursesToTakeRec([],[],_).
 	
 % isEligible(X,L) is true if the user has taken all required courses.
 isEligible(X,L) :-
 	(requires(X,Y);isEquiv(X,Z),requires(Z,Y)),
 	foreach(member(H,Y),(hasTaken(H,L); isEquiv(H,I),hasTaken(I,L))).
 isEligible(X,_) :-
-	\+ requires(X,_).
+	noReqs(X).
 hasTaken(C,L) :- member(C,L).
 
 newUser :- go([]).
