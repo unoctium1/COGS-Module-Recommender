@@ -185,8 +185,12 @@ course(math,443).
 course(mech,366).
 course(mech,420).
 course(mech,421).
+course(musc,201).
+course(musc,210).
+course(musc,319).
 course(musc,320).
 course(musc,415).
+course(phil,125).
 course(phil,220).
 course(phil,240).
 course(phil,260).
