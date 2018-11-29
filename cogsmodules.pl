@@ -606,6 +606,8 @@ adj([faculty, of, Fac | T], T, Obj,_) :- faculty(Obj, Fac).
 noun([course, Department, Number | T],T,course(Department, Number),_).
 noun([course | T], T, course(Department, Number),_).
 noun([module, course | T], T, Obj,_) :- isModule(Obj).
+noun([course, should, i, take | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
+noun([course, i, have, taken | T], T, Obj, St) :- member(Obj, St).
 
 reln([required, for | T], T, Obj, Course,_) :- requires(Course, Obj).
 
