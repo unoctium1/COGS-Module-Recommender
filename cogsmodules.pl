@@ -1,4 +1,4 @@
-:- module(cogsmodules).
+:- module(cogsmodules,[course/2,faculty/2,isModule/1,requires/2,newUser/0,go/1,isEquiv/2]).
 
 :- use_module(library(aggregate)).
 :- use_module(library(apply)).
