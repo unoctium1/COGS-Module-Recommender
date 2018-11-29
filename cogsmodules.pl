@@ -110,6 +110,7 @@ course(biol,458).
 course(biol,459).
 course(caps,301).
 course(cogs,200).
+course(comm,291).
 course(cpen,221).
 course(cpen,321).
 course(cpen,331).
@@ -140,6 +141,8 @@ course(cpsc,425).
 course(cpsc,430).
 course(cpsc,444).
 course(cpsc,445).
+course(econ,325).
+course(econ,327).
 course(eece,210).
 course(eece,309).
 course(eece,310).
@@ -147,7 +150,9 @@ course(eece,315).
 course(eece,320).
 course(eece,358).
 course(elec,331).
+course(engl,329).
 course(engl,331).
+course(frst,231).
 course(ling,100).
 course(ling,101).
 course(ling,200).
@@ -162,6 +167,7 @@ course(ling,327).
 course(ling,345).
 course(ling,405).
 course(ling,410).
+course(ling,420).
 course(ling,421).
 course(ling,425).
 course(ling,431).
@@ -213,7 +219,16 @@ course(phil,470).
 course(psyc,100).
 course(psyc,101).
 course(psyc,102).
+course(psyc,205).
 course(psyc,207).
+course(psyc,208).
+course(psyc,216).
+course(psyc,217).
+course(psyc,218).
+course(psyc,260).
+course(psyc,270).
+course(psyc,277).
+course(psyc,278).
 course(psyc,304).
 course(psyc,309).
 course(psyc,321).
@@ -233,6 +248,7 @@ course(stat,200).
 course(stat,203).
 course(stat,241).
 course(stat,251).
+course(stat,300).
 course(stat,302).
 course(stat,306).
 course(stat,344).
