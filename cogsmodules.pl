@@ -627,15 +627,16 @@ newUser :- go([]).
 
 % main program loop, where L are all courses taken by the user
 go(L) :-
-	addCourses(LN),
-	append(L,LN,Courses),
-	q(X,Courses),
-	write(X),
+	write('Add courses taken? y/n '),flush_output(current_output),
+	read(Q),nl,
+	((Q == 'yes';Q == 'y') -> addCourses(LN),append(L,LN,Courses);
+		Courses = L),
+	q(Ans,Courses),
 	go(Courses).
 
 % Queries users for new courses
 addCourses([X|L]) :-
-	write('Type courses taken in the form course(dept,123), or done if no more courses'), nl,
+	writeln('Type courses taken in the form course(dept,123), or done if no more courses'),
 	read(X),
 	dif(X,done),
 	addCourses(L).
@@ -712,6 +713,6 @@ ask(Q,A,St) :-
 
 q(Ans,St) :-
     write("Ask me: "), flush_output(current_output),
-    readln(Ln),
+	readln(Ln),
     question(Ln,End,Ans,St),
     member(End,[[],['?'],['.']]).
