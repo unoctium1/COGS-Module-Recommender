@@ -1,4 +1,4 @@
-:- module(cogsmodules,[course/2,faculty/2,isModule/1,requires/2,newUser/0,go/1,isEquiv/2]).
+% :- module(cogsmodules,[course/2,faculty/2,isModule/1,requires/2,newUser/0,go/1,isEquiv/2]).
 
 :- use_module(library(aggregate)).
 :- use_module(library(apply)).
@@ -56,7 +56,7 @@
 % MATH 303	SCIENCE		ONE OF: MATH 302, STAT 302
 % MATH 344	SCIENCE		(MATH 152 or MATH 221 and ONE OF: MATH 220, 226, CPSC 121) or MATH 223
 % MATH 443	SCIENCE		ONE OF: MATH 220, 226, CPSC 121 and 6 MATH 300-level credits
-% MECH 421	APL. SCI 	METH 366, COREQ: MECH 420
+% MECH 421	APL. SCI 	MECH 366, COREQ: MECH 420
 % MUSC 320	MUSC		MUSC 319
 % MUSC 415	MUSC		MUSC 201, MUSC 210
 % PHIL 320	ARTS		PHIL 220
@@ -99,14 +99,27 @@ course(asia,378).
 course(asia,470).
 course(audi,402).
 course(audi,403).
+course(biol,111).
+course(biol,200).
+course(biol,300).
 course(biol,361).
+course(biol,362).
+course(biol,364).
 course(biol,455).
 course(biol,458).
 course(biol,459).
+course(caps,301).
+course(cogs,200).
+course(comm,291).
+course(cpen,221).
+course(cpen,321).
+course(cpen,331).
 course(cpsc,110).
 course(cpsc,121).
 course(cpsc,210).
+course(cpsc,213).
 course(cpsc,221).
+course(cpsc,260).
 course(cpsc,304).
 course(cpsc,310).
 course(cpsc,311).
@@ -128,10 +141,23 @@ course(cpsc,425).
 course(cpsc,430).
 course(cpsc,444).
 course(cpsc,445).
+course(econ,325).
+course(econ,327).
+course(eece,210).
+course(eece,309).
+course(eece,310).
+course(eece,315).
+course(eece,320).
+course(eece,358).
+course(elec,331).
+course(engl,329).
+course(engl,331).
+course(frst,231).
 course(ling,100).
 course(ling,101).
 course(ling,200).
 course(ling,201).
+course(ling,222).
 course(ling,300).
 course(ling,311).
 course(ling,313).
@@ -141,6 +167,7 @@ course(ling,327).
 course(ling,345).
 course(ling,405).
 course(ling,410).
+course(ling,420).
 course(ling,421).
 course(ling,425).
 course(ling,431).
@@ -148,13 +175,32 @@ course(ling,432).
 course(ling,447).
 course(ling,451).
 course(ling,452).
+course(math,152).
+course(math,200).
+course(math,217).
+course(math,220).
+course(math,221).
+course(math,223).
+course(math,226).
+course(math,253).
+course(math,263).
 course(math,302).
 course(math,303).
+course(math,318).
 course(math,344).
 course(math,443).
+course(mech,366).
+course(mech,420).
 course(mech,421).
+course(musc,201).
+course(musc,210).
+course(musc,319).
 course(musc,320).
 course(musc,415).
+course(phil,125).
+course(phil,220).
+course(phil,240).
+course(phil,260).
 course(phil,320).
 course(phil,321).
 course(phil,322).
@@ -163,17 +209,33 @@ course(phil,326).
 course(phil,333).
 course(phil,340).
 course(phil,369).
+course(phil,371).
+course(phil,378).
 course(phil,441).
 course(phil,450).
 course(phil,451).
 course(phil,455).
 course(phil,470).
+course(psyc,100).
+course(psyc,101).
+course(psyc,102).
+course(psyc,205).
+course(psyc,207).
+course(psyc,208).
+course(psyc,216).
+course(psyc,217).
+course(psyc,218).
+course(psyc,260).
+course(psyc,270).
+course(psyc,277).
+course(psyc,278).
 course(psyc,304).
 course(psyc,309).
 course(psyc,321).
 course(psyc,333).
 course(psyc,336).
 course(psyc,359).
+course(psyc,360).
 course(psyc,366).
 course(psyc,367).
 course(psyc,368).
@@ -183,12 +245,14 @@ course(psyc,460).
 course(psyc,461).
 course(psyc,462).
 course(stat,200).
+course(stat,203).
 course(stat,241).
+course(stat,251).
+course(stat,300).
 course(stat,302).
 course(stat,306).
 course(stat,344).
 course(stat,406).
-
 
 % faculty(course(A,B),C) is true if course(A,B) is in faculty C
 faculty(course(anth, _),arts).
@@ -479,7 +543,7 @@ requires(course(psyc,333),[course(psyc,X),course(psyc,Y)]) :-
 	Y >= 200.	
 requires(course(psyc,336),[course(psyc,100)]).
 requires(course(psyc,336),[course(psyc,101),course(psyc,102)]).
-requires(course(psyc,336),[course(engl,329)]).	
+requires(course(psyc,336),[course(engl,329)]).	 
 requires(course(psyc,336),[course(ling,420)]).
 requires(course(psyc,336),[course(ling,200),course(ling,201)]).
 requires(course(psyc,359),[course(psyc,366)]).
@@ -512,6 +576,8 @@ requires(course(stat,344),[X,course(math,302)]) :-
 	member(X,[course(stat,200),course(stat,241),course(stat,251),course(stat,300),course(biol,300),course(comm,291),course(econ,325),course(econ,327),course(frst,231),course(psyc,218),course(psyc,278),course(psyc,366)]).
 requires(course(stat,406),[course(math,306)]).
 requires(course(stat,406),[course(cpsc,340)]).
+
+noReqs(X) :- \+ requires(X,_).
 	
 % Equivalent courses: hasTaken(X) is true if an equivalent course has been taken	TODO: figure out how to get this to work both ways
 isEquiv(course(math,302),course(stat,302)).
@@ -526,18 +592,35 @@ isEquiv(X,Y) :- \+ dif(X,Y).
 
 % coursesToTake(X,C,L) is true if C are pre reqs needed for X that haven't been taken. CoursesToTake(X,_) is false if isEligible(X) is true.
 
-%coursesToTake(X,C,L) :-
-%	\+ isEligible(X,L),
-%	requires(X,Y),
-%	filterMembers(Y,L,C).
+coursesToTake(X,C,L) :- length(C,_),coursesToTake2(X,C,L).
 
+coursesToTake2(X,C,L) :-
+	requires(X,Y),
+	subtract(Y,L,C0),
+	append(C0,C1,C),
+	coursesToTakeRec(C0,C1,L).
+coursesToTake2(X,[],L) :-
+	isEligible(X,L).
+
+coursesToTake1(X,C,L) :-
+	requires(X,Y),
+	subtract(Y,L,C).
+
+coursesToTakeRec([H|T],C,L) :-
+		coursesToTake2(H,C0,L),
+		append(C0,C1,C),
+		coursesToTakeRec(T,C1,L).
+coursesToTakeRec([H|T],C,L) :-
+		isEligible(H,L),
+		coursesToTakeRec(T,C,L).
+coursesToTakeRec([],[],_).
+	
 % isEligible(X,L) is true if the user has taken all required courses.
 isEligible(X,L) :-
 	(requires(X,Y);isEquiv(X,Z),requires(Z,Y)),
 	foreach(member(H,Y),(hasTaken(H,L); isEquiv(H,I),hasTaken(I,L))).
 isEligible(X,_) :-
-	\+ requires(X,_).
-	
+	noReqs(X).
 hasTaken(C,L) :- member(C,L).
 
 newUser :- go([]).
