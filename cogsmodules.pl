@@ -258,6 +258,7 @@ course(stat,406).
 faculty(course(anth, _),arts).
 faculty(course(asia, _),arts).
 faculty(course(econ, _),arts).
+faculty(course(engl, _),arts).
 faculty(course(ling, _),arts).
 faculty(course(phil, _),arts).
 faculty(course(psyc, _),arts).
@@ -623,16 +624,21 @@ isEligible(X,_) :-
 	noReqs(X).
 hasTaken(C,L) :- member(C,L).
 
+% run newUser. to start a new command
 newUser :- go([]).
 
-% main program loop, where L are all courses taken by the user
+% main program loop. L are courses taken
 go(L) :-
-	write('Add courses taken? y/n '),flush_output(current_output),
-	read(Q),nl,
-	((Q == 'yes';Q == 'y') -> addCourses(LN),append(L,LN,Courses);
+	write('Ask me: '), flush_output(current_output),
+	readln(Q),
+	write('Add courses taken? y/n '),
+	read(X),nl,
+	((X == 'yes';X == 'y') -> addCourses(LN),append(L,LN,Courses);
 		Courses = L),
-	q(Ans,Courses),
-	go(Courses).
+	question(Q,End,Ans,Courses),
+    member(End,[[],['?'],['.']]),
+	write(Ans).
+	
 
 % Queries users for new courses
 addCourses([X|L]) :-
@@ -641,6 +647,8 @@ addCourses([X|L]) :-
 	dif(X,done),
 	addCourses(L).
 addCourses([]).	
+
+
 
 % NLP
 % States
@@ -687,11 +695,12 @@ mp(T,T,_,_).
 
 adj([faculty, of, Fac | T], T, Obj,_) :- faculty(Obj, Fac).
 
-noun([course, Department, Number | T],T,course(Department, Number),_).
-noun([course | T], T, course(Department, Number),_).
+noun([course, Department, Number | T],T,course(Department, Number),_) :- course(Department,Number).
+noun([course | T], T, course(Department, Number),_) :- course(Department,Number).
 noun([module, course | T], T, Obj,_) :- isModule(Obj).
 
 reln([required, for | T], T, Obj, Course,_) :- requires(Course, Obj).
+reln([requires | T], T, Obj, Course,_) :- requires(Course, Obj).
 
 % question(Question,QR,Object) is true if Query provides an answer about Object to Question
 question(['Is' | T0],T2,Obj,St) :-
@@ -712,7 +721,9 @@ ask(Q,A,St) :-
 % To get the input from a line:
 
 q(Ans,St) :-
-    write("Ask me: "), flush_output(current_output),
+    write('Ask me: '), flush_output(current_output),
 	readln(Ln),
     question(Ln,End,Ans,St),
-    member(End,[[],['?'],['.']]).
+    member(End,[[],['?'],['.']]),
+	writeln(Ans),
+	flush_output.
