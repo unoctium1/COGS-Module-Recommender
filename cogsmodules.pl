@@ -264,6 +264,7 @@ faculty(course(phil, _),arts).
 faculty(course(psyc, _),arts).
 faculty(course(biol, _),science).
 faculty(course(caps, _),science).
+faculty(course(cogs, _),science).
 faculty(course(cpsc, _),science).
 faculty(course(math, _),science).
 faculty(course(stat, _),science).
@@ -570,6 +571,7 @@ requires(course(psyc,461),[X]) :-
 	member(X,[course(psyc,304),course(psyc,360),course(psyc,460)]).
 requires(course(psyc,462),[X]) :-
 	member(X,[course(psyc,304),course(psyc,360)]).
+requires(course(stat,302),X) :- requires(course(math,302),X).
 requires(course(stat,306),[X,course(math,302),Z]) :-
 	member(X,[course(math,152),course(math,221),course(math,223)]),
 	member(Z,[course(stat,200),course(stat,241),course(stat,251),course(stat,300),course(biol,300),course(comm,291),course(econ,325),course(econ,327),course(frst,231),course(psyc,218),course(psyc,278),course(psyc,366)]).
@@ -623,6 +625,19 @@ isEligible(X,L) :-
 isEligible(X,_) :-
 	noReqs(X).
 hasTaken(C,L) :- member(C,L).
+
+% filterFaculty(Fac,L,L2) is true if L2 is the elements of L for which they are in faculty Fac
+filterFaculty(Fac,[H|T],[H|T1]) :-
+	faculty(H,Fac),
+	filterFaculty(Fac,T,T1).
+filterFaculty(Fac,[H|T],[H1|T1]) :-
+	 \+ faculty(H,Fac),
+	 dif(H,H1),
+	 filterFaculty(Fac,T,[H1|T1]).
+filterFaculty(Fac,[H|T],[]) :-
+	\+ faculty(H,Fac),
+	filterFaculty(Fac,T,[]).
+filterFaculty(_,[],[]).
 
 % run newUser. to start a new command
 newUser :- go([]).
