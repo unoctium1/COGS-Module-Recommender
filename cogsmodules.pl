@@ -730,6 +730,7 @@ mp(T,T,_,_).
 adj([faculty, of, Fac | T], T, Obj,_) :- faculty(Obj, Fac).
 adj([Fac | T], T, Obj, _) :- faculty(Obj, Fac).
 adj([Fac | T], T, Obj, _) :- faculty(Obj, Fac).
+adj([fewest | T], T, Obj,_ :- length(Obj,_).
 
 noun([eligible, course | T], T, Obj, St) :- isEligible(Obj, St).
 noun([my, eligible, courses | T], T, Obj, St) :- isEligible(Obj, St).
@@ -766,7 +767,7 @@ question(['What',are | T0],T1,Obj,St) :-
 question(['What' | T0],T2,Obj,St) :-
     noun_phrase(T0,T1,Obj,St),
     mp(T1,T2,Obj,St).
-uestion(['Which' | T0],T1,Obj,St) :-
+question(['Which' | T0],T1,Obj,St) :-
     noun_phrase(T0,T1,Obj,St).
 
 % ask(Q,A) gives answer A to question Q
