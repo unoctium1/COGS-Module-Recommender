@@ -738,10 +738,9 @@ noun([course, Department, Number | T],T,course(Department, Number),_) :- course(
 noun([module, course, Department, Number | T], T, course(Department, Number), _) :- isModule(course(Department, Number).
 noun([course | T], T, course(Department, Number),_) :- course(Department,Number).
 noun([module, course | T], T, Obj,_) :- isModule(Obj).
-
+noun([my, possible, courses | T], T, Obj, []) :- noReqs(Obj).
 noun([possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
 noun([my, possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
-noun([my, possible, courses | T], T, Obj, []) :- isModule(Obj).
 noun([course, i, have, taken | T], T, Obj, St) :- member(Obj, St).
 
 reln([required, for | T], T, Obj, Course,_) :- requires(Course, Obj).
