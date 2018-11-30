@@ -743,14 +743,14 @@ noun([module, course | T], T, Obj,_) :- isModule(Obj).
 
 noun([possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
 noun([my, possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
-noun([my, possible, courses | T], T, Obj, []) :- requires(Obj,[]).
+noun([my, possible, courses | T], T, Obj, []) :- noReqs(Obj).
 noun([course, i, have, taken | T], T, Obj, St) :- member(Obj, St).
 
 reln([required, for | T], T, Obj, Course,_) :- requires(Course, Obj).
 reln([requires | T], T, Obj, Course,_) :- requires(Course, Obj).
 
 reln([should, take, for | T], T, Obj, Course,St) :- coursesToTake(Course,Obj,St).
-reln([should, I, take, for | T], T, Obj, Course,St) :- coursesToTake(Course,Obj,St).
+reln([should, i, take, for | T], T, Obj, Course,St) :- coursesToTake(Course,Obj,St).
 
 % question(Question,QR,Object) is true if Query provides an answer about Object to Question
 question(['Is' | T0],T2,Obj,St) :-
