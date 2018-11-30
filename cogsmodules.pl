@@ -730,14 +730,14 @@ mp(T,T,_,_).
 adj([faculty, of, Fac | T], T, Obj,_) :- faculty(Obj, Fac).
 adj([Fac | T], T, Obj, _) :- faculty(Obj, Fac).
 adj([Fac | T], T, Obj, _) :- faculty(Obj, Fac).
-adj([fewest | T], T, Obj,_ :- length(Obj,_).
+adj([fewest | T], T, Obj,_) :- length(Obj,_).
 
 noun([eligible, course | T], T, Obj, St) :- isEligible(Obj, St).
 noun([my, eligible, courses | T], T, Obj, St) :- isEligible(Obj, St).
 noun([course, can, i, take | T], T, Obj, St) :- isEligible(Obj, St).
 
 noun([course, Department, Number | T],T,course(Department, Number),_) :- course(Department,Number).
-noun([module, course, Department, Number | T], T, course(Department, Number), _) :- isModule(course(Department, Number).
+noun([module, course, Department, Number | T], T, course(Department, Number), _) :- isModule(course(Department, Number)).
 noun([course | T], T, course(Department, Number),_) :- course(Department,Number).
 noun([module, course | T], T, Obj,_) :- isModule(Obj).
 
