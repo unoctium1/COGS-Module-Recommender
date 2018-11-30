@@ -3,6 +3,28 @@
 :- use_module(library(aggregate)).
 :- use_module(library(apply)).
 
+% to use try:
+%	go([]).
+
+% A system for recommending Cogs Module courses, based on what courses a student has already taken.
+% The user makes a query, and the program uses inputted information in additon to the existing knowledge 
+% base in order to answer the question.
+
+% our system distinguishes between eligible courses (where the user meets all the prerequisites), and 
+% possible courses (where the user meets some of the prerequisites)
+
+% try asking:
+%	Is course cpsc 320?
+%	Is course cpsc 123?
+%	What is a module course?
+%	
+% after entering some courses, try asking
+%	What are my possible courses?
+%	What are my eligible courses?
+%
+% once you've found some courses you're interested in taking (say, phil 451), try asking
+% 	What is required for course phil 451?
+
 % ALL MODULES:
 % Course    Faculty     Prereqs											Equivalents
 % ANTH 417  ARTS		ANTH 100, LING 200
@@ -680,6 +702,8 @@ noun_phrase(T0,T4,Ind,St) :-
 % They do not provide any extra constraints.
 det([the | T],T,_).
 det([a | T],T,_).
+det([an | T], T, _).
+det([are | T], T, _).
 det(T,T,_).
 
 % adjectives(T0,T1,Ind) is true if 
@@ -702,22 +726,22 @@ mp([that|T0],T2,Subject,St) :-
 mp(T,T,_,_).
 
 % DICTIONARY
-%adj([large | T],T,Obj) :- large(Obj).
-%adj([Lang,speaking | T],T,Obj) :- speaks(Obj,Lang).
-
-%reln([borders | T],T,O1,O2) :- borders(O1,O2).
-%reln([the,capital,of | T],T,O1,O2) :- capital(O2,O1).
-%reln([next,to | T],T,O1,O2) :- borders(O1,O2).
 
 adj([faculty, of, Fac | T], T, Obj,_) :- faculty(Obj, Fac).
+adj([Fac | T], T, Obj, _) :- faculty(Obj, Fac).
+
+noun([eligible, course | T], T, Obj, St) :- isEligible(Obj, St).
+noun([my, eligible, courses | T], T, Obj, St) :- isEligible(Obj, St).
+noun([course, can, i, take | T], T, Obj, St) :- isEligible(Obj, St).
 
 noun([course, Department, Number | T],T,course(Department, Number),_) :- course(Department,Number).
+noun([module, course, Department, Number | T], T, course(Department, Number), _) :- isModule(course(Department, Number).
 noun([course | T], T, course(Department, Number),_) :- course(Department,Number).
 noun([module, course | T], T, Obj,_) :- isModule(Obj).
 
-% coursesToTake(X,C,L) is true if C are pre reqs needed for X that haven't been taken. CoursesToTake(X,_) is false if isEligible(X) is true.
-
-noun([course, should, i, take | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
+noun([possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
+noun([my, possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
+noun([my, possible, courses | T], T, Obj, []) :- isModule(Obj).
 noun([course, i, have, taken | T], T, Obj, St) :- member(Obj, St).
 
 reln([required, for | T], T, Obj, Course,_) :- requires(Course, Obj).
