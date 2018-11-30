@@ -602,7 +602,7 @@ requires(course(stat,344),[X,course(math,302)]) :-
 requires(course(stat,406),[course(math,306)]).
 requires(course(stat,406),[course(cpsc,340)]).
 
-noReqs(X) :- \+ requires(X,_).
+noReqs(course(X,Y)) :- course(X,Y), \+ requires(course(X,Y),_).
 	
 % Equivalent courses: hasTaken(X) is true if an equivalent course has been taken	TODO: figure out how to get this to work both ways
 isEquiv(course(math,302),course(stat,302)).
@@ -740,11 +740,12 @@ noun([course, Department, Number | T],T,course(Department, Number),_) :- course(
 noun([module, course, Department, Number | T], T, course(Department, Number), _) :- isModule(course(Department, Number)).
 noun([course | T], T, course(Department, Number),_) :- course(Department,Number).
 noun([module, course | T], T, Obj,_) :- isModule(Obj).
-
+noun([my, possible, courses | T], T, Obj, []) :- noReqs(Obj).
+noun([possible, courses | T], T, Obj, []) :- noReqs(Obj).
 noun([possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
 noun([my, possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
-noun([my, possible, courses | T], T, Obj, []) :- noReqs(Obj).
 noun([course, i, have, taken | T], T, Obj, St) :- member(Obj, St).
+noun([courses | T], T, Obj, _) :- member(course(X,Y),Obj),course(X,Y).
 
 reln([required, for | T], T, Obj, Course,_) :- requires(Course, Obj).
 reln([requires | T], T, Obj, Course,_) :- requires(Course, Obj).
