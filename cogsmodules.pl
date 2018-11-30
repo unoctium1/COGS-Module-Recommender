@@ -637,7 +637,8 @@ go(L) :-
 		Courses = L),
 	question(Q,End,Ans,Courses),
     member(End,[[],['?'],['.']]),
-	write(Ans).
+	writeln(Ans),
+	fail.
 	
 
 % Queries users for new courses
@@ -698,6 +699,9 @@ adj([faculty, of, Fac | T], T, Obj,_) :- faculty(Obj, Fac).
 noun([course, Department, Number | T],T,course(Department, Number),_) :- course(Department,Number).
 noun([course | T], T, course(Department, Number),_) :- course(Department,Number).
 noun([module, course | T], T, Obj,_) :- isModule(Obj).
+
+% coursesToTake(X,C,L) is true if C are pre reqs needed for X that haven't been taken. CoursesToTake(X,_) is false if isEligible(X) is true.
+
 noun([course, should, i, take | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
 noun([course, i, have, taken | T], T, Obj, St) :- member(Obj, St).
 
