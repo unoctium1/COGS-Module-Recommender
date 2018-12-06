@@ -617,7 +617,7 @@ isEquiv(X,Y) :- \+ dif(X,Y).
 
 % coursesToTake(X,C,L) is true if C are pre reqs needed for X that haven't been taken. CoursesToTake(X,_) is false if isEligible(X) is true.
 
-coursesToTake(X,C,L) :- length(C,_),coursesToTake2(X,C,L).
+coursesToTake(X,C,L) :- coursesToTake2(X,C,L).
 
 coursesToTake2(X,C,L) :-
 	requires(X,Y),
@@ -718,10 +718,10 @@ adjectives(T,T,_,_).
 % 'that' followed by a relation then a noun_phrase or
 % nothing 
 mp(T0,T2,Subject,St) :-
-    reln(T0,T1,Subject,Object,St),
-    noun_phrase(T1,T2,Object,St).
+	reln(T0,T1,Subject,Object,St),
+	noun_phrase(T1,T2,Object,St).
 mp([that|T0],T2,Subject,St) :-
-    reln(T0,T1,Subject,Object,St),
+	reln(T0,T1,Subject,Object,St),
     noun_phrase(T1,T2,Object,St).
 mp(T,T,_,_).
 
@@ -729,7 +729,7 @@ mp(T,T,_,_).
 
 adj([faculty, of, Fac | T], T, Obj,_) :- faculty(Obj, Fac).
 adj([Fac | T], T, Obj, _) :- faculty(Obj, Fac).
-adj([Fac | T], T, Obj, _) :- faculty(Obj, Fac).
+% adj([Fac | T], T, Obj, _) :- faculty(Obj, Fac).
 adj([fewest | T], T, Obj,_) :- length(Obj,_).
 
 noun([eligible, course | T], T, Obj, St) :- isEligible(Obj, St).
@@ -740,16 +740,20 @@ noun([course, Department, Number | T],T,course(Department, Number),_) :- course(
 noun([module, course, Department, Number | T], T, course(Department, Number), _) :- isModule(course(Department, Number)).
 noun([course | T], T, course(Department, Number),_) :- course(Department,Number).
 noun([module, course | T], T, Obj,_) :- isModule(Obj).
-noun([my, possible, courses | T], T, Obj, []) :- noReqs(Obj).
-noun([possible, courses | T], T, Obj, []) :- noReqs(Obj).
 noun([possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
 noun([my, possible, courses | T], T, Obj, St) :- requires(Obj, ListCourses), member(Y, St), member(Y, ListCourses).
+noun([my, possible, courses | T], T, Obj, []) :- noReqs(Obj).
+noun([possible, courses | T], T, Obj, []) :- noReqs(Obj).
 noun([course, i, have, taken | T], T, Obj, St) :- member(Obj, St).
-noun([courses | T], T, Obj, _) :- member(course(X,Y),Obj),course(X,Y).
+noun([courses | T], T, [], _).
+noun([courses | T], T, Obj, _) :- member(_,Obj).
+noun([Department, Number | T],T,course(Department,Number),_) :- course(Department,Number).
 
 reln([required, for | T], T, Obj, Course,_) :- requires(Course, Obj).
+reln([required, courses, for | T], T, Obj, Course,_) :- requires(Course, Obj).
 reln([requires | T], T, Obj, Course,_) :- requires(Course, Obj).
 
+reln([i, should, take, for | T], T, Obj, Course,St) :- coursesToTake(Course,Obj,St).
 reln([should, take, for | T], T, Obj, Course,St) :- coursesToTake(Course,Obj,St).
 reln([should, i, take, for | T], T, Obj, Course,St) :- coursesToTake(Course,Obj,St).
 
